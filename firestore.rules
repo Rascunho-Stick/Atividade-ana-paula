@@ -1,0 +1,16 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /favoriteAdvice/{id} {
+      function valid() {
+        let d = request.resource.data;
+        return d.uid == request.auth.uid
+          && d.adviceText is string && d.adviceText.size() > 0 && d.adviceText.size() <= 500
+          && d.note is string && d.note.size() <= 500;
+      }
+      allow read, delete: if request.auth != null && resource.data.uid == request.auth.uid;
+      allow create: if request.auth != null && valid();
+      allow update: if request.auth != null && resource.data.uid == request.auth.uid && valid();
+    }
+  }
+}

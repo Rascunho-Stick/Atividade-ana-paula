@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reflexa — Gerador de Conselhos e Reflexões</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip" href="#favoritos">Ir para os favoritos</a>
+<header class="top">
+  <a class="brand" href="#inicio"><span data-icon="bulb"></span>Reflexa</a>
+  <nav aria-label="Principal">
+    <a href="#inicio">Início</a>
+    <a href="#favoritos">Meus favoritos</a>
+    <a href="#sobre">Sobre</a>
+  </nav>
+  <a class="btn btn-ghost" href="#favoritos"><span data-icon="book"></span>Mural <b id="count">0</b></a>
+</header>
+
+<main>
+<section id="inicio" class="hero">
+  <div class="hero-text">
+    <h1>Uma reflexão pode mudar o seu dia.</h1>
+    <p>Descubra conselhos aleatórios, encontre novas perspectivas e guarde as mensagens que fazem sentido para você.</p>
+  </div>
+
+  <article class="advice" aria-live="polite" aria-busy="false" id="advice-card">
+    <div class="advice-meta"><span data-icon="bulb"></span><span id="advice-id">Conselho do momento</span></div>
+    <div class="spinner" id="spinner" hidden role="status"><span></span>Buscando um conselho…</div>
+    <blockquote id="advice-text" class="advice-text"></blockquote>
+    <div id="advice-error" class="error" hidden>
+      <p>Não foi possível obter um conselho agora. Verifique sua conexão ou tente novamente em instantes.</p>
+    </div>
+    <label class="note-label" for="note">Anotação pessoal (opcional)</label>
+    <textarea id="note" maxlength="500" rows="2" placeholder="O que essa frase fez você pensar?"></textarea>
+    <div class="actions">
+      <button class="btn btn-accent" id="btn-new" type="button" data-icon="refresh">Novo conselho</button>
+      <button class="btn btn-solid" id="btn-save" type="button" data-icon="bookmark">Salvar nos favoritos</button>
+      <button class="btn btn-ghost" id="btn-copy" type="button" data-icon="copy" aria-label="Copiar conselho">Copiar</button>
+      <button class="btn btn-ghost" id="btn-share" type="button" data-icon="share" hidden>Compartilhar</button>
+    </div>
+  </article>
+</section>
+
+<section id="favoritos" class="wall">
+  <h2>Meus favoritos</h2>
+  <div class="tools">
+    <div class="search">
+      <label class="sr" for="q">Pesquisar favoritos</label>
+      <input id="q" type="search" placeholder="Pesquisar no texto ou nas anotações">
+      <button class="btn btn-ghost" id="btn-clear" type="button" hidden>Limpar pesquisa</button>
+    </div>
+    <label class="sr" for="sort">Ordenar</label>
+    <select id="sort">
+      <option value="recent">Mais recentes primeiro</option>
+      <option value="old">Mais antigos primeiro</option>
+      <option value="az">Ordem alfabética</option>
+    </select>
+  </div>
+  <div id="config-warning" class="error" hidden>
+    O Firebase ainda não foi configurado. Preencha <code>js/firebase-config.js</code> para salvar e ver seus favoritos (veja o README).
+  </div>
+  <div id="list" class="list"></div>
+</section>
+
+<section id="sobre" class="about">
+  <h2>Sobre</h2>
+  <p>A Reflexa busca conselhos na <a href="https://api.adviceslip.com/" target="_blank" rel="noopener">Advice Slip API</a>. Os textos aparecem em inglês, exatamente como a API os entrega, e são salvos sem alterações. Seu mural é privado: cada navegador recebe uma identidade anônima e só ela lê os próprios favoritos.</p>
+</section>
+</main>
+
+<dialog id="dlg-edit">
+  <form id="form-edit" novalidate>
+    <h3>Editar favorito</h3>
+    <label for="e-text">Texto do conselho</label>
+    <textarea id="e-text" rows="3" maxlength="500" required></textarea>
+    <label for="e-note">Anotação pessoal</label>
+    <textarea id="e-note" rows="3" maxlength="500"></textarea>
+    <p class="field-error" id="e-error" hidden></p>
+    <div class="actions"><button class="btn btn-ghost" type="button" data-close>Cancelar</button><button class="btn btn-solid" type="submit" id="e-save">Salvar alterações</button></div>
+  </form>
+</dialog>
+
+<dialog id="dlg-view">
+  <h3>Detalhes</h3>
+  <div id="view-body"></div>
+  <div class="actions"><button class="btn btn-solid" type="button" data-close>Fechar</button></div>
+</dialog>
+
+<dialog id="dlg-del">
+  <h3>Excluir dos favoritos?</h3>
+  <p id="del-text"></p>
+  <div class="actions"><button class="btn btn-ghost" type="button" data-close>Cancelar</button><button class="btn btn-danger" type="button" id="del-ok">Excluir</button></div>
+</dialog>
+
+<div id="toasts" role="status" aria-live="polite"></div>
+<script type="module" src="main.js"></script>
+</body>
+</html>
